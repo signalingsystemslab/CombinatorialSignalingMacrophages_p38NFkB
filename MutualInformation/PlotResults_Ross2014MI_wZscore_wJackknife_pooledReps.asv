@@ -1,0 +1,266 @@
+% This script plots the results from Mutual Information calculation in p38
+% and NFkB dynamic features using the Ross 2014 method from output files
+% found HERE
+% TODO add link to output files
+
+%Startup
+% OneDrivePath = getenv('OneDrive');
+
+%% Figure 2 Mutual Information in All 4 Ligands Dose 6 p38 dynamics only
+
+% Load output file from HERE
+% TODO add link to output files
+% load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\AllStim_PooledRep_Dose6_Ross.mat']);
+
+% Plot results All Stim High Dose p38 only
+
+plot_data = [AllStim_PooledRep_Dose6_Ross(3).info_extrap]; % p38 only
+fig = figure('Position', [659,499,120, 227]);
+colors = setcolors;
+ColorOrderSL = {colors.p38;colors.p38;colors.mVen;colors.mVen;colors.mVenKTR;colors.mVenKTR};
+b= bar(plot_data, 'FaceColor','flat');
+ylabel('Mutual Information [bits]')
+title('All Stimuli, Dose 6')
+for i = 1:size(b.CData,1)
+    b.CData(i,:) = ColorOrderSL{i};
+end
+        xtips1 = b(1).XEndPoints;
+        ytips1 = b(1).YEndPoints;
+        labels1 = string(round(b(1).YData,2));
+        text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+
+ylim([0 2.1])
+xlim([0.3 1.7])
+
+% edit save path as desired
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Writing\p38 paper\AllFigure\MutualInformation\AllLig_Dose6_p38only' '.fig'])
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\\Writing\p38 paper\AllFigure\MutualInformation\AllLig_Dose6_p38only''.svg'])
+
+%% Figure 2 Mutual Information in Mock vs Ligands P38 only
+% order of ligands: P3C4, CpG, LPS, TNF
+
+% Load output file from HERE
+% TODO add link to output files
+
+MI_data{1} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\P3C4_PooledRep_MOCKvsDose6_Ross.mat']);
+MI_data{2} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\CpG_PooledRep_MOCKvsDose6_Ross.mat']);
+MI_data{3} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\LPS_PooledRep_MOCKvsDose6_Ross.mat']);
+MI_data{4} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\TNF_PooledRep_MOCKvsDose6_Ross.mat']);
+%
+% Plot results Mock vs Ligands P38 only
+plot_data = [];
+
+for i = 1:numel(MI_data)
+    FieldNames = fieldnames(MI_data{1,i});
+    plot_data = [plot_data, MI_data{1,i}.(FieldNames{1})(3).info_extrap]; % p38 only
+end
+
+fig = figure('Position', [659,499,240, 227]);
+colors = setcolors;
+ColorOrderSL = {colors.p38};%colors.p38;colors.mVen;colors.mVen;colors.mVenKTR;colors.mVenKTR};
+b= bar(plot_data, 'FaceColor','flat');
+ylabel('Mutual Information [bits]')
+xticklabels(["Mock, P3C4", "Mock, CpG", "Mock, LPS", "Mock, TNF"])
+ title('MI Mock vs Stimulus')
+for i = 1:size(b.CData,1)
+    b.CData(i,:) = ColorOrderSL{1};
+end
+        xtips1 = b(1).XEndPoints;
+        ytips1 = b(1).YEndPoints;
+        labels1 = string(round(b(1).YData,2));
+        text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+
+ylim([0 1])
+xlim([0.3 4.7])
+
+% edit save path as desired
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Writing\p38 paper\AllFigure\MutualInformation\MockvsLig_p38only' '.fig'])
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\\Writing\p38 paper\AllFigure\MutualInformation\MockvsLig_p38only''.svg'])
+
+%% Figure 3 Mutual Information in All Ligands Dose 6 p38 only, NFkBonly and Both
+
+% Load output file from HERE
+% TODO add link to output files
+
+load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\AllStim_PooledRep_Dose6_Ross.mat']);
+
+% Plot results 
+plot_data = [AllStim_PooledRep_Dose6_Ross([3,2,1]).info_extrap]; % p38 only
+fig = figure('Position', [659,499,166, 227]);
+colors = setcolors;
+b= bar(plot_data, 'FaceColor','flat');
+ylabel('Mutual Information [bits]')
+%xticklabels({'R1: p38','R2: p38','R1: NFkB','R2: NFkB','R1: NFkB + p38','R2: NFkB + p38'})
+title('All Stimuli, Dose 6')
+    b.CData(1,:) = colors.p38;
+    b.CData(2,:) = colors.mVen;
+    b.CData(3,:) = colors.mVenKTR;
+
+    for i = 1  
+        xtips= b(i).XEndPoints;
+        ytips = b(i).YEndPoints;
+        labels = string(round(b(i).YData,2));
+        text(xtips,ytips,labels,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+    end
+ylim([0 2.1])
+
+% edit save path as desired
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Writing\p38 paper\AllFigure\MutualInformation\AllLig_Dose6_All3' '.fig'])
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\\Writing\p38 paper\AllFigure\MutualInformation\AllLig_Dose6_All3''.svg'])
+
+%% Figure 3 Mutual Information in Mock vs Ligands p38 only, NFkBonly, Both
+% Load output file from HERE
+% TODO add link to output files
+% order of ligands: P3C4, CpG, LPS, TNF
+MI_data{1} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\P3C4_PooledRep_MOCKvsDose6_Ross.mat']);
+MI_data{2} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\CpG_PooledRep_MOCKvsDose6_Ross.mat']);
+MI_data{3} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\LPS_PooledRep_MOCKvsDose6_Ross.mat']);
+MI_data{4} = load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\TNF_PooledRep_MOCKvsDose6_Ross.mat']);
+
+% Plot results Mock vs Ligands 
+plot_data = [];
+for i = 1:numel(MI_data)
+    FieldNames = fieldnames(MI_data{1,i});
+    plot_data = [plot_data; MI_data{1,i}.(FieldNames{1})([3,2,1]).info_extrap]; % NFkBonly and Both
+end
+
+fig = figure('Position', [659,499,700, 365]);
+colors = setcolors;
+ColorOrderSL = {colors.mVen,colors.mVenKTR};
+b= bar(plot_data, 'FaceColor','flat');
+ylabel('Mutual Information [bits]')
+xticklabels(["Mock, P3C4", "Mock, CpG", "Mock, LPS", "Mock, TNF"])
+ title('MI Mock vs Stimulus')
+
+    b(1).CData = colors.p38;
+    b(2).CData = colors.mVen;
+    b(3).CData = colors.mVenKTR;
+
+    for i = 1:3  
+        xtips= b(i).XEndPoints;
+        ytips = b(i).YEndPoints;
+        labels = string(round(b(i).YData,2));
+        text(xtips,ytips,labels,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+    end
+
+ylim([0 1])
+
+% edit save path as desired
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Writing\p38 paper\AllFigure\MutualInformation\MockvsLig_All3' '.fig'])
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\\Writing\p38 paper\AllFigure\MutualInformation\MockvsLig_All3', '.svg'])
+
+% Plot results Mock vs Ligands  TNF only
+plot_data = [];
+for i = 1:numel(MI_data)
+    FieldNames = fieldnames(MI_data{1,i});
+    plot_data = [plot_data; MI_data{1,i}.(FieldNames{1})([3,2,1]).info_extrap]; % NFkBonly and Both
+end
+
+fig = figure('Position', [659,499,210, 227]);
+colors = setcolors;
+ColorOrderSL = {colors.mVen,colors.mVenKTR};
+x=1;
+b= bar(x, plot_data(4,:), 'FaceColor','flat');
+ylabel('Mutual Information [bits]')
+xticklabels(["Mock, TNF"])
+ title('MI Mock vs Stimulus')
+
+    b(1).CData = colors.p38;
+    b(2).CData = colors.mVen;
+    b(3).CData = colors.mVenKTR;
+
+    for i = 1:3  
+        xtips= b(i).XEndPoints;
+        ytips = b(i).YEndPoints;
+        labels = string(round(b(i).YData,2));
+        text(xtips,ytips,labels,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+    end
+ylim([0 1])
+
+% edit save path as desired
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Writing\p38 paper\AllFigure\MutualInformation\MockvsTNFonly_All3' '.fig'])
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\\Writing\p38 paper\AllFigure\MutualInformation\MockvsTNFonly_All3''.svg'])
+
+%% Figure 4 Mutual Information in PAMPs Dose 6 p38 only NFkBonly and Both
+
+% Load output file from HERE
+% TODO add link to output files
+
+load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\PAMPs_PooledRep_Dose6_Ross.mat']);
+
+% Plot results 
+plot_data = [PAMPs_PooledRep_Dose6_Ross([3, 2,1]).info_extrap]; % 
+fig = figure('Position', [659,499,210, 227]);
+colors = setcolors;
+b= bar(plot_data, 'FaceColor','flat');
+ylabel('Mutual Information [bits]')
+title('MI PAMPs, Dose 6')
+    b.CData(1,:) = colors.p38;
+    b.CData(2,:) = colors.mVen;
+    b.CData(3,:) = colors.mVenKTR;
+
+        xtips1 = b(1).XEndPoints;
+        ytips1 = b(1).YEndPoints;
+        labels1 = string(round(b(1).YData,2));
+        text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+
+ylim([0 1.61])
+
+% edit save path as desired
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Writing\p38 paper\AllFigure\MutualInformation\PAMPs_p39only_NFkBonly_both' '.fig'])
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\\Writing\p38 paper\AllFigure\MutualInformation\PAMPs_p39only_NFkBonly_both''.svg'])
+
+%% Figure 5 Mutual Information in 4x Dose responses p38 only. NFkBonly, and Both, incl Mock (6 doses)
+
+% Load output file from HERE
+% TODO add link to output files
+load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\P3C4_PooledRep_AllDoses_inclMock_Ross.mat']);
+load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\CpG_PooledRep_AllDoses_inclMock_Ross.mat']);
+load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\LPS_PooledRep_AllDoses_inclMock_Ross.mat']);
+load([OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Matlab analysis\Information theory\Ross_2014\Results Jackknife Zscored\PooledReps\TNF_PooledRep_AllDoses_inclMock_Ross.mat']);
+
+% Plot results 
+plot_data_P3C4 = [P3C4_PooledRep_AllDoses_inclMock_Ross([3, 2,1]).info_extrap]; % 
+plot_data_CpG = [CpG_PooledRep_AllDoses_inclMock_Ross([3, 2,1]).info_extrap]; % 
+plot_data_LPS = [LPS_PooledRep_AllDoses_inclMock_Ross([3, 2,1]).info_extrap]; % 
+plot_data_TNF = [TNF_PooledRep_AllDoses_inclMock_Ross([3, 2,1]).info_extrap]; % 
+
+plot_data = [plot_data_P3C4;plot_data_CpG; plot_data_LPS; plot_data_TNF];
+
+fig = figure('Position', [659,499,762, 227]);
+colors = setcolors;
+b= bar(plot_data, 'FaceColor','flat');
+ylabel('Mutual Information [bits]')
+title('Dose responses')
+       xticklabels(["P3C4", "CpG", "LPS", "TNF"])
+       b(1).FaceColor = colors.p38;
+       b(2).FaceColor = colors.mVen;
+       b(3).FaceColor = colors.mVenKTR;
+ 
+        xtips1 = b(1).XEndPoints;
+        ytips1 = b(1).YEndPoints;
+        labels1 = string(round(b(1).YData,2));
+        text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+
+        xtips2 = b(2).XEndPoints;
+        ytips2 = b(2).YEndPoints;
+        labels2 = string(round(b(2).YData,2));
+        text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+        xtips3 = b(3).XEndPoints;
+        ytips3 = b(3).YEndPoints;
+        labels3 = string(round(b(3).YData,2));
+        text(xtips3,ytips3,labels3,'HorizontalAlignment','center',...
+        'VerticalAlignment','bottom')
+ylim([0 2.4])
+
+% edit save path as desired
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\Writing\p38 paper\AllFigure\MutualInformation\DoseResponses_inclMock_p38only_NFkBonly_both' '.fig'])
+%saveas(gcf, [OneDrivePath, '\PostDoc UCLA\1 Post Doc UCLA\\Writing\p38 paper\AllFigure\MutualInformation\DoseResponses_inclMock_p38only_NFkBonly_both''.svg'])
